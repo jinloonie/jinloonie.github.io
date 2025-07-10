@@ -1,0 +1,180 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: url(blackabyss.jpg);
+            background-size: cover;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-position: center;
+            justify-content: center;
+            align-items: center;
+            margin: 0px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0 30px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .clown-gif {
+            top: -35px;
+            right: -15px;
+            position: fixed;
+        }
+
+       .dialoguebox {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: 70px;
+    width: 80%;
+    height: 400px;
+    background-color: rgba(200, 200, 200, 0.8);
+    border: 3px solid darkred;
+    border-radius: 12px;
+    color: white;
+    font-family: "Creepster", system-ui;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Changed this */
+    padding: 10px 30px;
+    box-sizing: border-box;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.dialoguebox .title {
+    font-size: 35px;
+    text-align:center;
+    margin: 10px 0 0px 0;
+    padding: 0;
+    line-height: 1.2;
+    color: crimson;
+    text-shadow: 1px 1px 2px black; /* Add depth */
+}  
+
+.body-text {
+    font-size: 25px;
+    text-align:left;
+    margin: 0;
+    padding: 0;
+    line-height: 1.4;
+    color: #f1f1f1; /* Softer white */
+}
+
+#nextLink {
+  padding: 10px 20px;
+  font-size: 18px;
+  font-family: "Creepster", system-ui;
+  background-color: darkred;
+  color: white;
+  border: 2px solid white;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+  align-self: center;
+  transition: background-color 0.3s ease;
+}
+
+#nextLink:hover {
+  background-color: crimson;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="clown-gif"><img src="clownpixel.gif"></div>
+        <div class="dialoguebox">
+            <div id="title" class="title"></div>
+            <div id="body" class="body-text" style="flex: 1 1 auto;"></div>
+            <button id="nextLink" style="display:none;" onclick="location.href='page4.html'">Next Booth</button>
+        </div>
+    </div>
+
+    <script>
+const dialogues = [
+    {
+        title: "⚠️ The Dangers of AI and Filters",
+        body: [
+            "Beauty filters can create fake beauty standards and make people feel bad about their real appearance.",
+            "Filters can be misused to trick or deceive others.",
+            "Too much filter use can hurt self-confidence."
+        ]
+    },
+    {
+        title: "⚠️ Privacy Risk",
+        body: [
+            "Photos and info shared with AI or filter apps may be saved, shared, or leaked without you knowing.",
+            "Be careful—not everything online is real."
+        ]
+    }
+];
+
+let currentDialogue = 0;
+const titleTarget = document.getElementById("title");
+const bodyTarget = document.getElementById("body");
+const nextLink = document.getElementById("nextLink");
+
+function typeText(target, text, i = 0, callback) {
+    if (i < text.length) {
+        target.innerHTML += text.charAt(i);
+        setTimeout(() => typeText(target, text, i + 1, callback), 70); // SLOWER
+    } else {
+        callback && callback();
+    }
+}
+
+function typeDialogue() {
+    titleTarget.innerHTML = "";
+    bodyTarget.innerHTML = "";
+    nextLink.style.display = "none"; // Hide until it's time
+
+    const dialogue = dialogues[currentDialogue];
+    typeText(titleTarget, dialogue.title, 0, () => {
+        typeBodyLines(dialogue.body, 0);
+    });
+}
+
+function typeBodyLines(lines, index) {
+    if (index < lines.length) {
+        const p = document.createElement("p");
+        bodyTarget.appendChild(p);
+        typeText(p, lines[index], 0, () => {
+            setTimeout(() => typeBodyLines(lines, index + 1), 600); // SLOWER paragraph pacing
+        });
+    } else {
+        // Done with title + body: wait for user to continue
+        if (currentDialogue < dialogues.length - 1) {
+            nextLink.innerText = "Continue";
+            nextLink.style.display = "inline";
+            nextLink.onclick = () => {
+                currentDialogue++;
+                typeDialogue();
+            };
+        } else {
+            nextLink.innerText = "Next Booth";
+            nextLink.style.display = "inline";
+            nextLink.onclick = () => location.href = "page4.html";
+        }
+    }
+}
+
+window.onload = () => {
+    const bgMusic = new Audio("knowledgebgm.mp3");
+    bgMusic.loop = true;
+    bgMusic.currentTime = 2; 
+    bgMusic.play().catch(e => console.log("Autoplay blocked:", e));
+    typeDialogue();
+};
+</script>
+
+</body>
+</html>

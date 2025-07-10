@@ -1,0 +1,203 @@
+<html> 
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: url(carnivalexit.jpg);
+            background-size: cover;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin: 0px;
+        }
+
+        .dialoguebox {
+          position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 13px;
+    width: 98%;
+    height: 170px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 3px solid darkred;
+    border-radius: 10px;
+    color: white;
+    font-family: "Creepster", system-ui; 
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow: visible;
+    border-radius: 12px;  
+        } 
+        .glitch-typewriter {
+           font-size: 26px;
+           color: rgb(235, 235, 235);
+           text-shadow:
+           0 0 5px #f0f,
+           0 0 10px #0ff,
+           0 0 20px #f0f,
+           0 0 40px #0ff;
+           position: relative;
+           white-space: normal;
+           border-right: none;
+           text-align: center;
+           animation: blink-caret 0.7s step-end infinite;
+        }
+        @keyframes blink {
+        from, to { border-color: transparent; }
+        50% { border-color: white; }
+        }
+        .you {
+          color: rgb(255, 0, 0);
+        font-size: 20px;
+        text-decoration: none;
+        font-weight: bold;
+        display: block;
+        text-align: left;
+        margin: 0;
+        padding: 0;
+        }
+        a {
+        color: rgb(255, 0, 0);
+        font-size: 20px;
+        text-decoration: none;
+        font-weight: bold;
+        display: block;
+        text-align: right;
+        margin: 0;
+        padding: 0;
+        transition: opacity 1s ease; /* Smooth fade in */
+    
+        }
+        a.show {
+            opacity: 1; /* Become visible */
+            pointer-events: auto;
+       }
+      a:hover {
+        text-decoration: underline;
+      }
+
+        .exitsign {
+            position: fixed;
+            left: 290px;
+            scale: 20%;
+            top: -10px;
+            animation: glitch 1s infinite;
+        }
+
+        /* ✅ Glitch animation keyframes */
+        @keyframes glitch {
+            0% {
+                transform: translate(0, 0) scale(1);
+                filter: none;
+            }
+            20% {
+                transform: translate(-2px, 1px) scale(1.01);
+                filter: hue-rotate(20deg) contrast(1.2);
+            }
+            40% {
+                transform: translate(2px, -1px) scale(0.99);
+                filter: brightness(1.1) saturate(1.4);
+            }
+            60% {
+                transform: translate(-1px, 2px) scale(1.02);
+                filter: contrast(1.5) grayscale(0.3);
+            }
+            80% {
+                transform: translate(1px, -2px) scale(1);
+                filter: hue-rotate(-20deg);
+            }
+            100% {
+                transform: translate(0, 0) scale(1);
+                filter: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Glitchy Exit Sign -->
+    <a href="page13.html">
+        <img src="exitsign.jpg" class="exitsign">
+    </a>
+    
+    <div class="dialoguebox">
+        <p class="you"> You: </p>
+        <p id="glitch-text" class="glitch-typewriter"></p>
+    </div>
+
+    <!-- Background music (unchanged) -->
+    <audio id="bgm1" loop>
+        <source src="creepybgm.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="bgm2" loop>
+        <source src="gigglingbgm.mp3" type="audio/mpeg">
+    </audio>
+
+
+    <!-- Play music on first click -->
+    <script>
+
+        const dialogues = [
+        "Oh look! The exit is right there!"];
+      let currentDialogue = 0;
+    let i = 0;
+    const target = document.getElementById("glitch-text");
+
+    function type() {
+        if (i < dialogues[currentDialogue].length) {
+            target.innerHTML += dialogues[currentDialogue].charAt(i);
+            i++;
+            setTimeout(type, 70); // Typing speed
+        } else {
+            // Pause before moving to the next dialogue
+            setTimeout(nextDialogue, 1000); // 1 second pause
+        }
+    }
+
+    function nextDialogue() {
+        currentDialogue++;
+        if (currentDialogue < dialogues.length) {
+            target.innerHTML = ""; // Clear current text
+            i = 0; // Reset character index
+            type();} 
+        else {
+        nextLink.classList.add("show");
+        }
+    }
+
+  window.addEventListener("load", () => {
+    const bgm1 = document.getElementById("bgm1");
+    const bgm2 = document.getElementById("bgm2");
+
+    // Try to play silently first
+    bgm1.muted = true;
+    bgm2.muted = true;
+bgm2.currentTime = 3;
+    bgm1.volume = 0.5;
+    bgm2.volume = 0.4;
+
+    Promise.all([bgm1.play(), bgm2.play()])
+      .then(() => {
+        console.log("Audio started muted");
+
+        // Try unmuting after a short delay
+        setTimeout(() => {
+          bgm1.muted = false;
+          bgm2.muted = false;
+        }, 1000);
+      })
+      .catch(err => {
+        console.warn("Autoplay failed. User interaction may be required:", err);
+      });
+  });
+
+  window.onload = type;
+</script>
+</body>
+</html>
+

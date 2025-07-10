@@ -1,0 +1,167 @@
+<html>
+    <head>
+         <meta charset="UTF-8">
+         <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+        <style>
+        body{
+            background:url(zoommirror.jpg);
+            background-size: cover;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-position: center;
+            justify-content: center;
+            align-items: center;
+            margin: 0px;
+            background-color: black;
+            display: flex;
+            height: 100vh;
+            position: relative;
+           }
+
+           .container {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+        .creepster-regular{
+           display: flex;
+           justify-content: center; 
+           align-items: center;    
+           height: 100vh;
+           flex-direction: column;
+           margin: 0;
+           margin-top: -100px;
+           margin-left: 100px;
+           text-align: center;
+           position: fixed;
+           top: 35%;
+           left: 40%;
+           transform: translate(-50%, -50%);
+           color: white;
+           text-align: center;
+           font-size: 60px;
+           font-family: "Creepster", system-ui;
+           font-weight: 400;
+           font-style: normal;
+        }
+        
+        a {
+        color: rgb(255, 0, 0);
+        font-size: 20px;
+        text-decoration: none;
+        font-weight: bold;
+        display: block;
+        text-align: right;
+        margin: 0;
+        padding: 0;
+        transition: opacity 1s ease; /* Smooth fade in */
+            pointer-events: none; /* Prevent click when hidden */
+        }
+
+        .girl-silhouette{
+          position: absolute;
+      transform: scale(1.8);
+      top: 100px;
+      left: 90px;
+        }
+  
+
+        .button-row {
+            display: flex;
+            gap: 20px;
+            margin-top: 400px;
+        }
+
+        .filter-button {
+            background-color: darkred;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            font-family: "Creepster", system-ui;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .filter-button:hover {
+            background-color: crimson;
+            transform: scale(1.1);
+        }
+        #glitch-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      display: none;
+      z-index: 10;
+      background-color: black;
+      transform: scale(1.2);
+        }
+
+        </style> 
+    </head>
+    <body>
+<audio id="bgm" loop>
+  <source src="glitchbgm.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+      <div class="container" id="glitch-container">
+     <p class="creepster-regular">Choose your filter</p>
+
+     <div class="girl-silhouette"> 
+      <img src="girlsilhouette.png">
+     </div>
+       <div class="button-row">
+    <button class="filter-button">Slimming</button>
+    <button class="filter-button">Beautifying</button>
+    <button class="filter-button">Whitening</button>
+</div>
+</div>
+
+<video id="glitch-video" muted playsinline preload="auto" src="glitch.mp4"></video>
+    <script>
+     const buttons = document.querySelectorAll('.filter-button');
+    const uiContainer = document.getElementById('glitch-container');
+    const glitchVideo = document.getElementById('glitch-video');
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        bgm.currentTime = 1;
+        // Hide UI
+        uiContainer.style.display = 'none';
+
+        // Show and play video
+        glitchVideo.style.display = 'block';
+        glitchVideo.play();
+      });
+    });
+
+    glitchVideo.addEventListener('ended', () => {
+      // Redirect after video ends
+      window.location.href = 'page3.html'; // Change this to your next page URL
+    });
+    const bgm = document.getElementById('bgm');
+
+buttons.forEach(button => {
+  button.addEventListener('click', () => {
+
+    // 🔺 Added: Play background music on button click
+    bgm.play().catch(e => console.log("Music autoplay blocked:", e));
+
+    // Existing code
+    uiContainer.style.display = 'none';
+    glitchVideo.style.display = 'block';
+    glitchVideo.play();
+  });
+});
+  </script>
+        
+    </body>
+</html>

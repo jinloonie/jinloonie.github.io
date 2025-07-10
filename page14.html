@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Carnival Quiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: "Creepster", system-ui;
+      background: url('quizbg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .quiz-box {
+      background-color: rgba(0, 0, 0, 0.7);
+      border: 3px solid darkred;
+      border-radius: 12px;
+      padding: 30px;
+      max-width: 600px;
+      width: 90%;
+      box-sizing: border-box;
+    }
+
+    .question {
+      font-size: 26px;
+      margin-bottom: 20px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .option {
+      padding: 15px;
+      border: 2px solid white;
+      border-radius: 10px;
+      font-size: 20px;
+      background-color: rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .option:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .correct {
+      background-color: green !important;
+      color: white;
+    }
+
+    .wrong {
+      background-color: #800000 !important;
+      color: white;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    #result {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 24px;
+      display: none;
+    }
+
+    #nextBtn {
+      display: none;
+      margin-top: 20px;
+      font-family: "Creepster", system-ui;
+      font-size: 22px;
+      padding: 10px 20px;
+      background-color: darkred;
+      border: 2px solid white;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #nextBtn:hover {
+      background-color: crimson;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-box">
+    <div id="question" class="question">Loading...</div>
+    <div id="options" class="options"></div>
+    <div id="result">🎉 Congrats. You have learnt about the dangers and harms online. You have succesfully escaped this carnival!</div>
+    <button id="nextBtn" onclick="nextQuestion()">Next</button>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "⚠️ What is online grooming?",
+        options: ["Learning how to use social media", "Pretending to be someone to build trust and harm others", "Posting too many selfies", "Ignoring strangers online"],
+        correct: 1
+      },
+      {
+        question: "⚠️ Why are fake profiles dangerous?",
+        options: ["They are made by celebrities", "They might trick people into giving personal info", "They always have funny usernames", "They only follow random accounts"],
+        correct: 1
+      },
+      {
+        question: "⚠️ In what way can AI voice impersonation become dangerous?",
+        options: ["It can deceive people by mimicking trusted voices", "It generates sound effects for games", "It entertains users with fake voices", "It causes delays in conversations"],
+        correct: 0
+      },
+      {
+        question: "⚠️  How do filters potentially lower someone's self-esteem?",
+        options: ["By giving everyone the same appearance", "By making faces look overly natural", "By promoting digitally altered beauty as the norm", "By changing only the background of pictures"],
+        correct: 2
+      },
+      {
+        question: "⚠️ Which action is most effective for staying safe online?",
+        options: ["Being careful and limiting what you share", "Sharing details only with online followers", "Posting at night to avoid attention", "Using filters as a privacy shield"],
+        correct: 0
+      },
+      {
+        question: "⚠️ What makes online grooming difficult to detect at first?",
+        options: [" It always involves fake accounts", "Groomers often act friendly and build trust over time", "It rarely happens", "It only happens on gaming sites"],
+        correct: 1
+      }
+    ];
+
+    let currentQuestion = 0;
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const nextBtn = document.getElementById("nextBtn");
+    const resultEl = document.getElementById("result");
+
+    function loadQuestion() {
+      const current = quizData[currentQuestion];
+      questionEl.textContent = current.question;
+      optionsEl.innerHTML = "";
+
+      current.options.forEach((option, index) => {
+        const btn = document.createElement("div");
+        btn.classList.add("option");
+        btn.textContent = option;
+        btn.onclick = () => checkAnswer(btn, index);
+        optionsEl.appendChild(btn);
+      });
+
+      nextBtn.style.display = "none";
+    }
+
+    function checkAnswer(selectedOption, index) {
+      const correctIndex = quizData[currentQuestion].correct;
+
+      if (index === correctIndex) {
+        selectedOption.classList.add("correct");
+        disableAllOptions();
+        nextBtn.style.display = "block";
+      } else {
+        selectedOption.classList.add("wrong");
+        selectedOption.onclick = null;
+      }
+    }
+
+    function disableAllOptions() {
+      const allOptions = document.querySelectorAll(".option");
+      allOptions.forEach(opt => opt.onclick = null);
+    }
+
+    function nextQuestion() {
+  currentQuestion++;
+  if (currentQuestion < quizData.length) {
+    loadQuestion();
+  } else {
+    // Hide quiz elements and show the ending message
+    questionEl.style.display = "none";
+    optionsEl.style.display = "none";
+    nextBtn.style.display = "none";
+    resultEl.style.display = "block";
+
+    // Change background image
+    document.body.style.backgroundImage = "url('escaped.jpg')"; 
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundPosition = "center";
+
+    // Stop quiz music and start ending music
+    bgMusic.pause();
+    bgMusic.currentTime = 0;
+
+    const endingMusic = new Audio("lalalabgm.mp3");
+    endingMusic.loop = true;
+    endingMusic.currentTime = 1.5;
+    endingMusic.play().catch(e => console.log("Autoplay blocked:", e));
+  }
+}
+
+
+const bgMusic = new Audio("quizbgm.mp3");
+    bgMusic.loop = true;
+    bgMusic.currentTime = 19; 
+    bgMusic.play().catch(e => console.log("Autoplay blocked:", e));
+
+    window.onload = loadQuestion;
+  </script>
+</body>
+</html>

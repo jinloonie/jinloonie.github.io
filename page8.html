@@ -1,0 +1,161 @@
+<html>
+    <head>
+         <meta charset="UTF-8">
+         <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+        <style>
+        body{
+            background:url(whereami.jpg);
+            background-size: cover;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-position: center;
+            justify-content: center;
+            align-items: center;
+            margin: 0px;
+        }
+        .dialoguebox {
+          position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 13px;
+    width: 98%;
+    height: 170px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 3px solid darkred;
+    border-radius: 10px;
+    color: white;
+    font-family: "Creepster", system-ui; 
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow: visible;
+    border-radius: 12px;  
+        } 
+        .glitch-typewriter {
+           font-size: 26px;
+           color: rgb(235, 235, 235);
+           text-shadow:
+           0 0 5px #f0f,
+           0 0 10px #0ff,
+           0 0 20px #f0f,
+           0 0 40px #0ff;
+           position: relative;
+           white-space: normal;
+           border-right: none;
+           text-align: center;
+           animation: blink-caret 0.7s step-end infinite;
+        }
+        @keyframes blink {
+        from, to { border-color: transparent; }
+        50% { border-color: white; }
+        }
+        .you {
+          color: rgb(255, 0, 0);
+        font-size: 20px;
+        text-decoration: none;
+        font-weight: bold;
+        display: block;
+        text-align: left;
+        margin: 0;
+        padding: 0;
+        }
+        a {
+        color: rgb(255, 0, 0);
+        font-size: 20px;
+        text-decoration: none;
+        font-weight: bold;
+        display: block;
+        text-align: right;
+        margin: 0;
+        padding: 0;
+        transition: opacity 1s ease; /* Smooth fade in */
+            pointer-events: none; /* Prevent click when hidden */
+        }
+        a.show {
+            opacity: 1; /* Become visible */
+            pointer-events: auto;
+       }
+      a:hover {
+        text-decoration: underline;
+      }
+      .girl-gif{
+      transform: scale(2.5) scaleX(-1);
+      position: absolute;   
+      left: 200px;    
+      bottom: 240px;
+      }
+        </style> 
+    </head>
+    <body>
+     <div class="girl-gif"> <img src="girl.gif"></div>
+        <div class="dialoguebox">
+        <p class="you"> You: </p>
+        <p id="glitch-text" class="glitch-typewriter"></p>
+    <p><a href="page9.html" id="nextLink"> Check Messages </a></p>
+  </div>
+
+  <audio id="bgm1" loop>
+        <source src="creepybgm.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="bgm2" loop>
+        <source src="messagebgm.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+const dialogues = [
+    "Where did you bring me again?",
+    "Omg, Who's messaging me now?"
+];
+
+let currentDialogue = 0;
+let i = 0;
+const target = document.getElementById("glitch-text");
+const nextLink = document.getElementById("nextLink");
+
+const bgm1 = document.getElementById("bgm1");
+const bgm2 = document.getElementById("bgm2");
+
+// Start bgm1 from 2 seconds and loop
+bgm1.currentTime = 2;
+bgm1.play().catch(e => console.log("Autoplay blocked:", e));
+
+function type() {
+    if (i < dialogues[currentDialogue].length) {
+        target.innerHTML += dialogues[currentDialogue].charAt(i);
+        i++;
+        setTimeout(type, 70); // Typing speed
+    } else {
+        // Pause before moving to the next dialogue
+        setTimeout(nextDialogue, 1000); // 1 second pause
+    }
+}
+
+function nextDialogue() {
+    currentDialogue++;
+
+    if (currentDialogue === 1) {
+        // Start bgm2 after first dialogue finishes
+        bgm2.currentTime = 2;
+        bgm2.play().catch(e => console.log("Autoplay blocked:", e));
+    }
+
+    if (currentDialogue < dialogues.length) {
+        target.innerHTML = ""; // Clear current text
+        i = 0; // Reset character index
+        type();
+    } else {
+        nextLink.classList.add("show");
+    }
+}
+
+window.onload = type;
+</script>
+
+        
+    </body>
+</html>

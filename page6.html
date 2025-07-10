@@ -1,0 +1,169 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Creepster&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: url(echochamber.jpg);
+        background-size: cover;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-position: center;
+        justify-content: center;
+        align-items: center;
+        margin: 0px;
+      }
+
+      #button-container {
+        display: none;
+        text-align: center;
+        position: fixed;
+        bottom: 250px;
+        left: 100;
+        width: 100%;
+        z-index: 10;
+        margin: 0 50px;
+      }
+
+      .response-btn {
+        font-family: "Creepster", system-ui;
+        background-color: darkred;
+        color: white;
+        font-size: 50px; /* Bigger font */
+        padding: 15px 40px; /* Bigger padding */
+        margin: 0 25px; /* More horizontal spacing */
+        border: 3px solid white; /* Thicker border */
+        border-radius: 12px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        min-width: 180px; /* Minimum width for bigger buttons */
+      }
+
+      .response-btn:hover {
+        background-color: crimson;
+      }
+
+      .dialoguebox {
+        position: fixed;
+        left: 10px;
+        right: 10px;
+        bottom: 13px;
+        width: 98%;
+        height: 170px;
+        background-color: rgba(0, 0, 0, 0.8);
+        border: 3px solid darkred;
+        border-radius: 12px;
+        color: white;
+        font-family: "Creepster", system-ui;
+        font-size: 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 10px;
+        box-sizing: border-box;
+        overflow: visible;
+        z-index: 5;
+      }
+
+      .glitch-typewriter {
+        font-size: 26px;
+        color: rgb(235, 235, 235);
+        text-shadow: 0 0 5px #f0f, 0 0 10px #0ff, 0 0 20px #f0f,
+          0 0 40px #0ff;
+        position: relative;
+        white-space: normal;
+        text-align: center;
+        animation: blink-caret 0.7s step-end infinite;
+      }
+
+      .you {
+        color: rgb(255, 0, 0);
+        font-size: 20px;
+        font-weight: bold;
+        text-align: left;
+        margin: 0;
+        padding: 0;
+      }
+
+      .clown-gif {
+        bottom: -220px;
+        left: -360px;
+        position: fixed;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="clown-gif"><img src="clownpixel.gif" /></div>
+
+    <!-- Buttons outside and above dialogue box -->
+    <div id="button-container">
+      <button onclick="location.href='page7-1.html'" class="response-btn">
+        Share
+      </button>
+      <button onclick="location.href='page7-2.html'" class="response-btn">
+        Ignore
+      </button>
+    </div>
+
+    <div class="dialoguebox">
+      <p class="you">Anonymous:</p>
+      <p id="glitch-text" class="glitch-typewriter"></p>
+    </div>
+
+    <script>
+  const dialogues = [
+    "Hello, I'm Mr Melvin!",
+    "I'm from DBS bank,",
+    "I will need your full name and IC for confirmation",
+    "in regards to the deletion of your account!",
+  ];
+
+  let currentDialogue = 0;
+  let i = 0;
+  const target = document.getElementById("glitch-text");
+  const buttonContainer = document.getElementById("button-container");
+
+  function type() {
+    if (i < dialogues[currentDialogue].length) {
+      target.innerHTML += dialogues[currentDialogue].charAt(i);
+      i++;
+      setTimeout(type, 70);
+    } else {
+      setTimeout(nextDialogue, 1000);
+    }
+  }
+
+  function nextDialogue() {
+    currentDialogue++;
+    if (currentDialogue < dialogues.length) {
+      target.innerHTML = "";
+      i = 0;
+      type();
+    } else {
+      buttonContainer.style.display = "block";
+    }
+  }
+
+  // Create the audio objects
+  const bgMusic = new Audio("creepybgm.mp3");
+  const helloAudio = new Audio("hello.mp3");
+
+  bgMusic.loop = true;
+  bgMusic.currentTime = 30;
+  bgMusic.volume = 0.3;
+
+  window.onload = () => {
+    // Play both audios at the same time
+    bgMusic.play().catch(e => console.log("BGM autoplay blocked:", e));
+    helloAudio.play().catch(e => console.log("Hello audio autoplay blocked:", e));
+    type();
+  };
+</script>
+
+  </body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('whereami.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .phone {
+      width: 260px;
+      height: 470px;
+      background: #111;
+      border: 8px solid #333;
+      border-radius: 24px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .notch {
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70px;
+      height: 16px;
+      background: #000;
+      border-radius: 10px;
+      z-index: 2;
+    }
+
+
+    .phone-design {
+      text-align: left;
+      color: white;
+      background: #222;
+      padding: 15px 15px;
+      font-size: 14px;
+      font-weight: bold;
+      border-bottom: 1px solid #5c5b5b;
+    }
+
+    .chat-name {
+      text-align: left;
+      color: white;
+      background: #222;
+      padding: 8px 12px;
+      font-size: 14px;
+      font-weight: bold;
+      border-bottom: 1px solid #444;
+    }
+
+    .screen {
+      background: #e5ddd5;
+      flex: 1;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
+
+    .message {
+      background: white;
+      padding: 6px 10px;
+      border-radius: 16px;
+      margin: 5px 0;
+      max-width: 80%;
+      font-size: 12px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.4s ease-out;
+      align-self: flex-start;
+    }
+
+    .message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .typing {
+      width: 40px;
+      height: 16px;
+      background: white;
+      border-radius: 16px;
+      padding: 4px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      margin: 5px 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease-out;
+      align-self: flex-start;
+    }
+
+    .typing.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .dot {
+      width: 5px;
+      height: 5px;
+      background: #999;
+      border-radius: 50%;
+      animation: blink 1s infinite alternate;
+    }
+
+    .dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes blink {
+      from { opacity: 0.3; }
+      to { opacity: 1; }
+    }
+
+    .reply-bar {
+      background: #f5f5f5;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      border-top: 1px solid #ccc;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .reply-bar:hover {
+      background: #e0e0e0;
+    }
+
+    .reply-bar input {
+      flex: 1;
+      padding: 6px 10px;
+      border: none;
+      border-radius: 16px;
+      font-size: 12px;
+      background: #fff;
+      pointer-events: none;
+    }
+
+    .reply-bar input::placeholder {
+      color: #888;
+    }
+
+    .reply-bar button {
+      background: #0084ff;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      margin-left: 8px;
+      font-size: 14px;
+      cursor: default;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone">
+    <div class="notch"></div>
+    <div class= "phone-design"></div>
+    <div class="chat-name">Online Friend 😈</div>
+    <div class="screen" id="screen"></div>
+    <div class="reply-bar" onclick="location.href='page10.html'">
+      <input type="text" placeholder="Tap to reply..." disabled />
+      <button disabled>➤</button>
+    </div>
+  </div>
+
+  <audio id="msgSound" src="messagebgm.mp3" preload="auto"></audio>
+
+  <script>
+  const messages = [
+    "Hey, I am so excited to meet you for the first time!",
+    "you said we would meet at the carnival right? where are you at now?",
+    "Send me a photo of yourself, I haven't seen you in person before so this will help me find you when we meet!",
+    "Hello?",
+    "Hello?",
+    "Send me your location. I'll be right there!"
+  ];
+
+  let current = 0;
+  const screen = document.getElementById('screen');
+
+  function showNextMessage() {
+    if (current < messages.length) {
+      const typing = document.createElement('div');
+      typing.className = 'typing';
+      typing.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+      screen.appendChild(typing);
+      setTimeout(() => typing.classList.add('show'), 50);
+      screen.scrollTop = screen.scrollHeight;
+
+      setTimeout(() => {
+        screen.removeChild(typing);
+
+        const div = document.createElement('div');
+        div.className = 'message';
+        div.textContent = messages[current];
+        screen.appendChild(div);
+
+        // 🔊 Play sound on message arrival
+        const msgSound = document.getElementById('msgSound');
+        msgSound.currentTime = 2;
+        msgSound.play();
+
+        if ("vibrate" in navigator) {
+          navigator.vibrate(100);
+        }
+
+        setTimeout(() => {
+          div.classList.add('show');
+          screen.scrollTop = screen.scrollHeight;
+          current++;
+          setTimeout(showNextMessage, 1800);
+        }, 100);
+      }, 900);
+    }
+  }
+
+  window.onload = showNextMessage;
+</script>
+
+</body>
+</html>
+
